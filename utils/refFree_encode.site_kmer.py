@@ -76,10 +76,10 @@ if __name__ == '__main__':
     encoder.file_buffer(sys.argv[2])
 
     if sys.argv[1] == '--site_kmer':
-        encoder.encode_site_kmer(4)
+        encoder.encode_site_kmer(7)
 
     elif sys.argv[1] == '--kmer':
-        encoder.encode_kmer(6)
+        encoder.encode_kmer(9)
 
     else:
         print('Invalid option', file=sys.stderr)
