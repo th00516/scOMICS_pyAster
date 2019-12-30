@@ -41,8 +41,8 @@ class kmer_encoder:
 
             kmer_counts = dict(pd.value_counts([_[i:i + K] for _ in self.read_seq_mat], sort=False))
 
-            for kmer_seq in kmer_freqs.keys():
-                if kmer_seq in kmer_counts:
+            for kmer_seq in kmer_counts.keys():
+                if 'N' not in kmer_seq:
                     kmer_freqs[kmer_seq] = kmer_counts[kmer_seq]
 
             kmer = [kmer_freqs[_] for _ in sorted(kmer_freqs.keys())]
@@ -60,8 +60,8 @@ class kmer_encoder:
         for i in range(0, self.read_seq_len - (K - 1)):
             kmer_counts = dict(pd.value_counts([_[i:i + K] for _ in self.read_seq_mat], sort=False))
 
-            for kmer_seq in kmer_freqs.keys():
-                if kmer_seq in kmer_counts:
+            for kmer_seq in kmer_counts.keys():
+                if 'N' not in kmer_seq:
                     kmer_freqs[kmer_seq] += kmer_counts[kmer_seq]
 
         kmer = [kmer_freqs[_] for _ in sorted(kmer_freqs.keys())]
@@ -76,10 +76,10 @@ if __name__ == '__main__':
     encoder.file_buffer(sys.argv[2])
 
     if sys.argv[1] == '--site_kmer':
-        encoder.encode_site_kmer(8)
+        encoder.encode_site_kmer(4)
 
     elif sys.argv[1] == '--kmer':
-        encoder.encode_kmer(11)
+        encoder.encode_kmer(6)
 
     else:
         print('Invalid option', file=sys.stderr)
