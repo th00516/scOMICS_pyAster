@@ -53,6 +53,10 @@ class kmer_encoder:
 
         self.kmer_win = np.asarray(total_kmer_freq)
 
+    def encode_kmer_hamming(self, K):
+        """"""
+        pass
+
 
 if __name__ == '__main__':
     encoder = kmer_encoder()
