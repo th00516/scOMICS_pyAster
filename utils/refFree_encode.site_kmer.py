@@ -41,11 +41,9 @@ class kmer_encoder:
 
             kmer_counts = dict(pd.value_counts([_[i:i + K] for _ in self.read_seq_mat], sort=False))
 
-            total_kmer_count = sum(kmer_counts.values())
-
             for kmer_seq in kmer_freqs.keys():
                 if kmer_seq in kmer_counts:
-                    kmer_freqs[kmer_seq] = kmer_counts[kmer_seq] / total_kmer_count
+                    kmer_freqs[kmer_seq] = kmer_counts[kmer_seq]
 
             kmer = [kmer_freqs[_] for _ in sorted(kmer_freqs.keys())]
 
@@ -62,22 +60,28 @@ class kmer_encoder:
         for i in range(0, self.read_seq_len - (K - 1)):
             kmer_counts = dict(pd.value_counts([_[i:i + K] for _ in self.read_seq_mat], sort=False))
 
-            total_kmer_count = sum(kmer_counts.values())
-
             for kmer_seq in kmer_freqs.keys():
                 if kmer_seq in kmer_counts:
-                    kmer_freqs[kmer_seq] = kmer_counts[kmer_seq] / total_kmer_count
+                    kmer_freqs[kmer_seq] += kmer_counts[kmer_seq]
 
-            kmer = [kmer_freqs[_] for _ in sorted(kmer_freqs.keys())]
+        kmer = [kmer_freqs[_] for _ in sorted(kmer_freqs.keys())]
 
-            total_kmer_freq.append(kmer)
+        total_kmer_freq.append(kmer)
 
         self.kmer_win = np.asarray(total_kmer_freq)
 
 
 if __name__ == '__main__':
     encoder = kmer_encoder()
-    encoder.file_buffer(sys.argv[1])
-    encoder.encode_site_kmer(6)
+    encoder.file_buffer(sys.argv[2])
 
-    np.save(sys.argv[1] + '.npy', np.around(encoder.kmer_win / np.max(encoder.kmer_win) * 255))
+    if sys.argv[1] == '--site_kmer':
+        encoder.encode_site_kmer(8)
+
+    elif sys.argv[1] == '--kmer':
+        encoder.encode_kmer(11)
+
+    else:
+        print('Invalid option', file=sys.stderr)
+
+    np.save(sys.argv[2] + '.npy', np.around(encoder.kmer_win / np.max(encoder.kmer_win) * 255))
