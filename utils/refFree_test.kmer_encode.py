@@ -3,9 +3,10 @@
 
 import sys
 import gzip
-from itertools import product
 import pandas as pd
 import numpy as np
+
+from itertools import product
 
 
 class kmer_encoding:
