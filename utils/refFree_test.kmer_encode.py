@@ -9,7 +9,7 @@ import numpy as np
 from itertools import product
 
 
-class kmer_encoding:
+class kmer_encoder:
     def __init__(self):
         """"""
         self.read_seq_mat = []
@@ -55,7 +55,7 @@ class kmer_encoding:
 
 
 if __name__ == '__main__':
-    encoder = kmer_encoding()
+    encoder = kmer_encoder()
     encoder.file_buffer(sys.argv[1])
     encoder.encode_kmer(6)
 
