@@ -34,6 +34,10 @@ class kmer_encoder:
 
     def encode_site_kmer(self, K):
         """"""
+        if K % 2 == 0:
+            print('K should be a odd', file=sys.stderr)
+            exit(1)
+
         total_kmer_freq = []
 
         for i in range(0, self.read_seq_len - (K - 1)):
@@ -53,6 +57,10 @@ class kmer_encoder:
 
     def encode_kmer(self, K):
         """"""
+        if K % 2 == 0:
+            print('K should be a odd', file=sys.stderr)
+            exit(1)
+
         total_kmer_freq = []
 
         kmer_freqs = {''.join(_): 0 for _ in product(('A', 'T', 'C', 'G'), repeat=K)}
@@ -70,6 +78,11 @@ class kmer_encoder:
 
         self.kmer_win = np.asarray(total_kmer_freq)
 
+    def kmer_filtering(self, f_min, f_max):
+        """"""
+        self.kmer_win[self.kmer_win < f_min] = 0
+        self.kmer_win[self.kmer_win > f_max] = 0
+
 
 if __name__ == '__main__':
     encoder = kmer_encoder()
@@ -84,4 +97,6 @@ if __name__ == '__main__':
     else:
         print('Invalid option', file=sys.stderr)
 
-    np.save(sys.argv[2] + '.npy', np.around(encoder.kmer_win / np.max(encoder.kmer_win) * 255))
+    encoder.kmer_filtering(20, 1000)
+
+    np.save(sys.argv[2] + '.npy', encoder.kmer_win)
