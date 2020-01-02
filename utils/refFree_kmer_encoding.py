@@ -35,7 +35,7 @@ class kmer_encoder:
     def encode_site_kmer(self, K):
         """"""
         if K % 2 == 0:
-            print('K should be a odd', file=sys.stderr)
+            print('K should be an odd', file=sys.stderr)
             exit(1)
 
         total_kmer_freq = []
@@ -58,7 +58,7 @@ class kmer_encoder:
     def encode_kmer(self, K):
         """"""
         if K % 2 == 0:
-            print('K should be a odd', file=sys.stderr)
+            print('K should be an odd', file=sys.stderr)
             exit(1)
 
         total_kmer_freq = []
