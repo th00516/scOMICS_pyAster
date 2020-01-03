@@ -59,14 +59,14 @@ if __name__ == '__main__':
     k.kmer_motif_stat(int(sys.argv[-1]))
 
     for i in sorted(k.kmer_motif_set.keys()):
-        n = k.kmer_motif_set[i]
+        x = k.kmer_motif_set[i]
 
         ###############################
         # count number of 1 in binary #
         ###############################
         count = 0
-        while n:
-            n = n & n - 1
+        while x:
+            x = x & x - 1
             count += 1
         ###############################
 
