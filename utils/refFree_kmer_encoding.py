@@ -97,6 +97,6 @@ if __name__ == '__main__':
     else:
         print('Invalid option', file=sys.stderr)
 
-    encoder.kmer_filtering(20, 1000)
+    encoder.kmer_filtering(30, 1500)
 
     np.save(sys.argv[2] + '.npy', encoder.kmer_win)

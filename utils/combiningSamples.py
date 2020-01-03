@@ -25,9 +25,12 @@ if __name__ == '__main__':
     for mat in sys.argv[1:]:
         mat = np.load(mat)
 
-        mat = hpf(mat, 0.6)
+        mat[mat < 50] = 0
+        mat[mat > 500] = 500
 
-        mat = mat.reshape((1, mat.size))
+        # mat = hpf(mat, 0.6)
+
+        mat = mat.reshape((1, -1))
 
         img_arr.extend(mat)
 
