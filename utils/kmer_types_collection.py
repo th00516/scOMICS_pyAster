@@ -58,7 +58,7 @@ if __name__ == '__main__':
     k.reshape_reads(sys.argv[1])
     k.kmer_motif_stat(int(sys.argv[-1]))
 
-    with gzip.open(sys.argv[1] + '.snp.gz', 'wt') as OU:
+    with gzip.open(sys.argv[1] + '.snp_idx.gz', 'wt') as OU:
         for i in sorted(k.kmer_motif_set.keys()):
             x = k.kmer_motif_set[i]
 
@@ -75,5 +75,5 @@ if __name__ == '__main__':
             # only dualistic SNP should be stored #
             #######################################
             if count <= 2:
-                print(i + '\t' + k.kmer_motif_set[i], file=OU)
+                print(i + '\t' + str(k.kmer_motif_set[i]), file=OU)
             #######################################
