@@ -59,4 +59,20 @@ if __name__ == '__main__':
     k.kmer_motif_stat(int(sys.argv[-1]))
 
     for i in sorted(k.kmer_motif_set.keys()):
-        print(i, k.kmer_motif_set[i])
+        n = k.kmer_motif_set[i]
+
+        ###############################
+        # count number of 1 in binary #
+        ###############################
+        count = 0
+        while n:
+            n = n & n - 1
+            count += 1
+        ###############################
+
+        #######################################
+        # only dualistic SNP should be stored #
+        #######################################
+        if count <= 2:
+            print(i, k.kmer_motif_set[i])
+        #######################################
