@@ -3,7 +3,6 @@
 
 import sys
 import gzip
-import multiprocessing
 
 
 class kmer:
@@ -33,8 +32,12 @@ class kmer:
 
     def kmer_motif_stat(self, K):
         """"""
+        ###################################
+        # only one copy would be assessed #
+        ###################################
         self.kmer_set.update([seq[n:n + K] for n in range(0, self.seq_len - K + 1)
                               for seq in self.seq_mat if 'N' not in seq[n:n + K]])
+        ###################################
 
         for k_seq in self.kmer_set:
             k_seq = [_ for _ in k_seq]
@@ -51,27 +54,9 @@ class kmer:
 
 
 if __name__ == '__main__':
-    def kmer_handle(read_file, K):
-        k = kmer()
-        k.reshape_reads(read_file)
-        k.kmer_motif_stat(int(K))
+    k = kmer()
+    k.reshape_reads(sys.argv[1])
+    k.kmer_motif_stat(int(sys.argv[-1]))
 
-        return k.kmer_motif_set
-
-    pool = multiprocessing.Pool(processes=2)
-    results = []
-
-    for i in range(0, 2):
-        results.append(pool.apply_async(kmer_handle, (sys.argv[1], sys.argv[-1])))
-
-    pool.close()
-    pool.join()
-
-    k1 = results[0].get()
-    k2 = results[1].get()
-
-    for i in sorted(set(list(k1.keys()) + list(k2.keys()))):
-        k1[i] = k1[i] if i in k1 else 0
-        k2[i] = k2[i] if i in k2 else 0
-
-        print(i, k1[i], k2[i])
+    for i in sorted(k.kmer_motif_set.keys()):
+        print(i, k.kmer_motif_set[i])
