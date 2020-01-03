@@ -58,21 +58,22 @@ if __name__ == '__main__':
     k.reshape_reads(sys.argv[1])
     k.kmer_motif_stat(int(sys.argv[-1]))
 
-    for i in sorted(k.kmer_motif_set.keys()):
-        x = k.kmer_motif_set[i]
+    with gzip.open(sys.argv[1] + '.snp.gz', 'wt') as OU:
+        for i in sorted(k.kmer_motif_set.keys()):
+            x = k.kmer_motif_set[i]
 
-        ###############################
-        # count number of 1 in binary #
-        ###############################
-        count = 0
-        while x:
-            x = x & x - 1
-            count += 1
-        ###############################
+            ###############################
+            # count number of 1 in binary #
+            ###############################
+            count = 0
+            while x:
+                x = x & x - 1
+                count += 1
+            ###############################
 
-        #######################################
-        # only dualistic SNP should be stored #
-        #######################################
-        if count <= 2:
-            print(i, k.kmer_motif_set[i])
-        #######################################
+            #######################################
+            # only dualistic SNP should be stored #
+            #######################################
+            if count <= 2:
+                print(i + '\t' + k.kmer_motif_set[i], file=OU)
+            #######################################
