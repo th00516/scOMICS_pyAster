@@ -53,13 +53,17 @@ class kmer:
             else:
                 self.kmer_motif_set[k_seq] += k_sco
 
+    def kmer_stat(self, K):
+        """"""
+        pass
+
 
 if __name__ == '__main__':
     k = kmer()
     k.reshape_reads(sys.argv[1])
     k.kmer_motif_stat(int(sys.argv[-1]))
 
-    with gzip.open(sys.argv[1] + '.snp_idx.gz', 'wt') as OU:
+    with open(sys.argv[1] + '.snp_idx.lst', 'wt') as OU:
         for i in sorted(k.kmer_motif_set.keys()):
             x = k.kmer_motif_set[i]
 
@@ -73,8 +77,8 @@ if __name__ == '__main__':
             ###############################
 
             #######################################
-            # only dualistic SNP should be stored #
+            # only homogenic SNP should be stored #
             #######################################
-            if count <= 2:
-                print(i + '\t' + os.path.basename(sys.argv[1]) + '\t' + str(k.kmer_motif_set[i]), file=OU)
+            if count <= 1:
+                print(i + ',' + os.path.basename(sys.argv[1]) + ',' + str(k.kmer_motif_set[i]), file=OU)
             #######################################
