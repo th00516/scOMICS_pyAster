@@ -77,8 +77,30 @@ if __name__ == '__main__':
             ###############################
 
             #######################################
-            # only homogenic SNP should be stored #
+            # only dualistic SNP should be stored #
             #######################################
-            if count <= 1:
-                print(i + ',' + os.path.basename(sys.argv[1]) + ',' + str(k.kmer_motif_set[i]), file=OU)
+            if count <= 2:
+                code = '{:04b}'.format(k.kmer_motif_set[i])
+
+                i = [_ for _ in i]
+
+                iL = ''.join(i[:int(int(sys.argv[-1]) / 2)])
+                iR = ''.join(i[int(int(sys.argv[-1]) / 2) + 1:])
+
+                i0 = ''.join((iL, 'A', iR))
+                i1 = ''.join((iL, 'C', iR))
+                i2 = ''.join((iL, 'G', iR))
+                i3 = ''.join((iL, 'T', iR))
+
+                if int(code[3]) == 1:
+                    print(i0 + ',' + os.path.basename(sys.argv[1]) + ',' + code[3], file=OU)
+
+                if int(code[2]) == 1:
+                    print(i1 + ',' + os.path.basename(sys.argv[1]) + ',' + code[2], file=OU)
+
+                if int(code[1]) == 1:
+                    print(i2 + ',' + os.path.basename(sys.argv[1]) + ',' + code[1], file=OU)
+
+                if int(code[0]) == 1:
+                    print(i3 + ',' + os.path.basename(sys.argv[1]) + ',' + code[0], file=OU)
             #######################################
