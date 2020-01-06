@@ -2,6 +2,7 @@
 
 
 import sys
+import os.path
 import gzip
 
 
@@ -75,5 +76,5 @@ if __name__ == '__main__':
             # only dualistic SNP should be stored #
             #######################################
             if count <= 2:
-                print(i + '\t' + str(k.kmer_motif_set[i]), file=OU)
+                print(i + '\t' + os.path.basename(sys.argv[1]) + '\t' + str(k.kmer_motif_set[i]), file=OU)
             #######################################
