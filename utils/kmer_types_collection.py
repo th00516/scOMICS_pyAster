@@ -45,7 +45,11 @@ class kmer:
                 else:
                     self.kmer_set[seq[n:n + K]] += 1
 
+        ##############################################################
+        # keep k-mer that locate in 60%~90% of its ordered frequency #
+        ##############################################################
         F_min, F_max = np.percentile([_ for _ in self.kmer_set.values()], [60, 90])
+        ##############################################################
 
         for k_seq in self.kmer_set.keys():
             if F_min <= self.kmer_set[k_seq] <= F_max:
