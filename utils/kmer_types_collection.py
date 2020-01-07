@@ -4,6 +4,7 @@
 import sys
 import os.path
 import gzip
+import numpy as np
 
 
 class kmer:
@@ -11,7 +12,7 @@ class kmer:
         """"""
         self.seq_mat = []
         self.seq_len = 0
-        self.kmer_set = set()
+        self.kmer_set = {}
         self.kmer_motif_set = {}
 
         self.k_typ = {'A': 1, 'C': 2, 'G': 4, 'T': 8}
@@ -33,29 +34,31 @@ class kmer:
 
     def kmer_motif_stat(self, K):
         """"""
-        ###################################
-        # only one copy would be assessed #
-        ###################################
-        self.kmer_set.update([seq[n:n + K] for n in range(0, self.seq_len - K + 1)
-                              for seq in self.seq_mat if 'N' not in seq[n:n + K]])
-        ###################################
+        for seq in self.seq_mat:
+            for n in range(0, self.seq_len - K + 1):
+                if 'N' in seq[n:n + K]:
+                    continue
 
-        for k_seq in self.kmer_set:
-            k_seq = [_ for _ in k_seq]
-            k_sco = self.k_typ[k_seq[int(K / 2)]]
+                if seq[n:n + K] not in self.kmer_set:
+                    self.kmer_set.update({seq[n:n + K]: 1})
 
-            k_seq[int(K / 2)] = 'N'
-            k_seq = ''.join(k_seq)
+                else:
+                    self.kmer_set[seq[n:n + K]] += 1
 
-            if k_seq not in self.kmer_motif_set:
-                self.kmer_motif_set.update({k_seq: k_sco})
+        F_min, F_max = np.percentile([_ for _ in self.kmer_set.values()], [60, 90])
 
-            else:
-                self.kmer_motif_set[k_seq] += k_sco
+        for k_seq in self.kmer_set.keys():
+            if F_min <= self.kmer_set[k_seq] <= F_max:
+                k_seq = [_ for _ in k_seq]
+                k_sco = self.k_typ[k_seq[int(K / 2)]]
+                k_seq[int(K / 2)] = 'N'
+                k_seq = ''.join(k_seq)
 
-    def kmer_stat(self, K):
-        """"""
-        pass
+                if k_seq not in self.kmer_motif_set:
+                    self.kmer_motif_set.update({k_seq: k_sco})
+
+                else:
+                    self.kmer_motif_set[k_seq] += k_sco
 
 
 if __name__ == '__main__':
@@ -79,7 +82,7 @@ if __name__ == '__main__':
             #######################################
             # only dualistic SNP should be stored #
             #######################################
-            if count <= 2:
+            if count <= 1:
                 code = '{:04b}'.format(k.kmer_motif_set[i])
 
                 i = [_ for _ in i]
