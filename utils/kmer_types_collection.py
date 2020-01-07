@@ -46,9 +46,9 @@ class kmer:
                     self.kmer_set[seq[n:n + K]] += 1
 
         ##############################################################
-        # keep k-mer that locate in 60%~90% of its ordered frequency #
+        # keep k-mer that locate in 90%~95% of its ordered frequency #
         ##############################################################
-        F_min, F_max = np.percentile([_ for _ in self.kmer_set.values()], [60, 90])
+        F_min, F_max = np.percentile([_ for _ in self.kmer_set.values()], [90, 95])
         ##############################################################
 
         for k_seq in self.kmer_set.keys():
@@ -86,7 +86,7 @@ if __name__ == '__main__':
             #######################################
             # only dualistic SNP should be stored #
             #######################################
-            if count <= 1:
+            if count == 2:
                 code = '{:04b}'.format(k.kmer_motif_set[i])
 
                 i = [_ for _ in i]
