@@ -70,6 +70,8 @@ if __name__ == '__main__':
     k.reshape_reads(sys.argv[1])
     k.kmer_motif_stat(int(sys.argv[-1]))
 
+    STAT = open(sys.argv[1] + '.snp_idx.stat', 'wt')
+
     with open(sys.argv[1] + '.snp_idx.lst', 'wt') as OU:
         for i in sorted(k.kmer_motif_set.keys()):
             x = k.kmer_motif_set[i]
@@ -83,10 +85,10 @@ if __name__ == '__main__':
                 count += 1
             ###############################
 
-            #######################################
-            # only dualistic SNP should be stored #
-            #######################################
-            if count == 2:
+            ####################################################
+            # only homozygous & dualistic SNP should be stored #
+            ####################################################
+            if count <= 2:
                 code = '{:04b}'.format(k.kmer_motif_set[i])
 
                 i = [_ for _ in i]
@@ -110,4 +112,10 @@ if __name__ == '__main__':
 
                 if int(code[0]) == 1:
                     print(i3 + ',' + os.path.basename(sys.argv[1]) + ',' + code[0], file=OU)
-            #######################################
+
+                print(''.join((iL, 'N', iR)) + ',' +
+                      os.path.basename(sys.argv[1]) + ',' +
+                      str(k.kmer_motif_set[''.join((iL, 'N', iR))]), file=STAT)
+            ####################################################
+
+    STAT.close()
