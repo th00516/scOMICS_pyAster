@@ -14,11 +14,10 @@ class kmer:
         self.seq_len = 0
         self.kmer_set = {}
         self.kmer_motif_type_set = {}
-        self.kmer_motif_set = {}
 
         self.k_type_maker = {'A': 1, 'C': 2, 'G': 4, 'T': 8}
 
-    def reshape_reads(self, read_file):
+    def pack_reads(self, read_file):
         """"""
         with gzip.open(read_file, 'rt') as FIN:
             N = 1
@@ -53,7 +52,7 @@ class kmer:
                     self.kmer_set[seq[n:n + K]] += 1
 
         ##############################################################
-        # keep k-mer that locate in 90%~95% of its ordered frequency #
+        # keep k-mer that locate in 90%~98% of its ordered frequency #
         ##############################################################
         F_min, F_max = np.percentile([_ for _ in self.kmer_set.values()], [90, 95])
         ##############################################################
@@ -71,20 +70,17 @@ class kmer:
 
                 if k_seq_motif not in self.kmer_motif_type_set:
                     self.kmer_motif_type_set.update({k_seq_motif: k_mak})
-                    self.kmer_motif_set.update({k_seq_motif: self.kmer_set[k_seq]})
 
                 else:
                     self.kmer_motif_type_set[k_seq_motif] += k_mak
-                    self.kmer_motif_set[k_seq_motif] += self.kmer_set[k_seq]
 
 
 if __name__ == '__main__':
     k = kmer()
-    k.reshape_reads(sys.argv[1])
+    k.pack_reads(sys.argv[1])
     k.kmer_motif_stat(int(sys.argv[-1]))
 
     T_OU = open(sys.argv[1] + '.snp_idx.type_stat', 'wt')
-    F_OU = open(sys.argv[1] + '.snp_idx.freq_stat', 'wt')
 
     for i in sorted(k.kmer_motif_type_set.keys()):
         x = k.kmer_motif_type_set[i]
@@ -108,11 +104,8 @@ if __name__ == '__main__':
             iR = ''.join(i[int(int(sys.argv[-1]) / 2) + 1:])
 
             score_t = k.kmer_motif_type_set[''.join((iL, 'N', iR))]
-            score_f = k.kmer_motif_set[''.join((iL, 'N', iR))]
 
             print(''.join((iL, 'N', iR)) + ',' + os.path.basename(sys.argv[1]) + ',' + str(score_t), file=T_OU)
-            print(''.join((iL, 'N', iR)) + ',' + os.path.basename(sys.argv[1]) + ',' + str(score_f), file=F_OU)
         ####################################################
 
     T_OU.close()
-    F_OU.close()
