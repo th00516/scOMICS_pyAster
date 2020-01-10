@@ -13,9 +13,9 @@ class kmer:
         self.seq_mat = []
         self.seq_len = 0
         self.kmer_set = {}
-        self.kmer_motif_type_set = {}
+        self.kmer_motif_set = {}
 
-        self.k_type_maker = {'A': 1, 'C': 2, 'G': 4, 'T': 8}
+        self.site_maker = {'A': 1, 'C': 2, 'G': 4, 'T': 8}
 
     def pack_reads(self, read_file):
         """"""
@@ -66,13 +66,13 @@ class kmer:
 
                 k_seq_motif = ''.join((k_seqL, 'N', k_seqR))
 
-                k_mak = self.k_type_maker[k_seq_arr[int(K / 2)]]
+                k_mak = self.site_maker[k_seq_arr[int(K / 2)]]
 
-                if k_seq_motif not in self.kmer_motif_type_set:
-                    self.kmer_motif_type_set.update({k_seq_motif: k_mak})
+                if k_seq_motif not in self.kmer_motif_set:
+                    self.kmer_motif_set.update({k_seq_motif: k_mak})
 
                 else:
-                    self.kmer_motif_type_set[k_seq_motif] += k_mak
+                    self.kmer_motif_set[k_seq_motif] += k_mak
 
 
 if __name__ == '__main__':
@@ -80,10 +80,10 @@ if __name__ == '__main__':
     k.pack_reads(sys.argv[1])
     k.kmer_motif_stat(int(sys.argv[-1]))
 
-    T_OU = open(sys.argv[1] + '.snp_idx.type_stat', 'wt')
+    OU = open(sys.argv[1] + '.snp_idx.motif_stat', 'wt')
 
-    for i in sorted(k.kmer_motif_type_set.keys()):
-        x = k.kmer_motif_type_set[i]
+    for i in sorted(k.kmer_motif_set.keys()):
+        x = k.kmer_motif_set[i]
 
         ###############################
         # count number of 1 in binary #
@@ -103,9 +103,9 @@ if __name__ == '__main__':
             iL = ''.join(i[:int(int(sys.argv[-1]) / 2)])
             iR = ''.join(i[int(int(sys.argv[-1]) / 2) + 1:])
 
-            score_t = k.kmer_motif_type_set[''.join((iL, 'N', iR))]
+            score_t = k.kmer_motif_set[''.join((iL, 'N', iR))]
 
-            print(''.join((iL, 'N', iR)) + ',' + os.path.basename(sys.argv[1]) + ',' + str(score_t), file=T_OU)
+            print(''.join((iL, 'N', iR)) + ',' + os.path.basename(sys.argv[1]) + ',' + str(score_t), file=OU)
         ####################################################
 
-    T_OU.close()
+    OU.close()
