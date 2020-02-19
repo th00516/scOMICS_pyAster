@@ -52,7 +52,7 @@ class kmer:
                     self.kmer_set[seq[n:n + K]] += 1
 
         ##############################################################
-        # keep k-mer that locate in 90%~98% of its ordered frequency #
+        # keep k-mer that locate in 90%~95% of its ordered frequency #
         ##############################################################
         F_min, F_max = np.percentile([_ for _ in self.kmer_set.values()], [90, 95])
         ##############################################################
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     k.pack_reads(sys.argv[1])
     k.kmer_motif_stat(int(sys.argv[-1]))
 
-    OU = open(sys.argv[1] + '.snp_idx.motif_stat', 'wt')
+    OU = open(sys.argv[1] + '.idx.motif_stat', 'wt')
 
     for i in sorted(k.kmer_motif_set.keys()):
         x = k.kmer_motif_set[i]
