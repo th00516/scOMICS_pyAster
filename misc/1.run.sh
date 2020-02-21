@@ -1,0 +1,1 @@
+ls individual/*.gz | while read p; do echo "mkdir -p kmer.3 && time ../../../utils/kmer_types_collection.py $(basename $p) 11 && mv $(basename $p).snp_idx.*_stat kmer.3"; done > individual/run.kmer.sh
